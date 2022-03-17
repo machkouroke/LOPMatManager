@@ -3,7 +3,7 @@ import math
 
 class Matrice:
     # Constructor for matrix class
-    def __init__(self, rows, column, contents):
+    def __init__(self, rows:list, column:list, contents):
         self.rows, self.columns = rows, column
         self.contents = contents
         self.matr_display = Matrice.seq_to_matrice(self.contents)
@@ -34,9 +34,7 @@ class Matrice:
     def mul_by_constant(self, constant):
         product_matrice = []
         for x in range(self.rows):
-            row = []
-            for y in range(self.columns):
-                row.append(self.contents[x][y] * constant)
+            row = [self.contents[x][y] * constant for y in range(self.columns)]
             product_matrice.append(row)
         Matrice.result_print(Matrice.seq_to_matrice(product_matrice))
 
@@ -50,9 +48,11 @@ class Matrice:
             for x in range(self.rows):
                 row = []
                 for y in range(matr.columns):
-                    product = 0
-                    for z in range(self.columns):
-                        product += self.contents[x][z] * matr.contents[z][y]
+                    product = sum(
+                        self.contents[x][z] * matr.contents[z][y]
+                        for z in range(self.columns)
+                    )
+
                     row.append(product)
                 product_of_element.append(row)
             Matrice.result_print(Matrice.seq_to_matrice(product_of_element))
@@ -111,7 +111,6 @@ class Matrice:
                 content = Matrice.sub_mat(matrice.contents, n, m, x, y)
                 sub_matrice = Matrice(n - 1, m - 1, content)
                 cofactor = (pow(-1, x + y) * Matrice.determinant(sub_matrice)) * (det ** -1)
-                cofactor = cofactor
                 row.append(cofactor)
             inverse_mat.append(row)
         inverse_mat = Matrice.matrix_transposition(Matrice(n, m, inverse_mat))
@@ -122,13 +121,8 @@ class Matrice:
         matrix_transpose = []
         if transposition_type == 'main':
             for x in range(matrice.rows):
-                row = []
-                for y in range(matrice.columns):
-                    row.append(matrice.contents[y][x])
+                row: list = [matrice.contents[y][x] for y in range(matrice.columns)]
                 matrix_transpose.append(row)
-        # To obtain a symmetrical transposition with respect to the secondary diagonal
-        # I first make a transposition on the main diagonal
-        # then a vertical and finally a horizontal
         elif transposition_type == 'side':
             matrix_transpose = Matrice.matrix_transposition(matrice, 'main')
             matrice.contents = matrix_transpose
@@ -138,17 +132,14 @@ class Matrice:
         elif transposition_type == 'vertical':
             matrix_transpose = [x[::-1] for x in matrice.contents]
         elif transposition_type == 'horizontal':
-            matrix_transpose = [x for x in matrice.contents[::-1]]
+            matrix_transpose = list(matrice.contents[::-1])
         return matrix_transpose
 
     # This method allows the entry of
     # the matrix then returns the content in the form of a list
     @staticmethod
     def matrice_former(n, m):
-        contents = []
-        for x in range(n):
-            contents.append([float(y) for y in input().split()[:m]])
-        return contents
+        return [[float(y) for y in input().split()[:m]] for _ in range(n)]
 
     # This method allows you to switch
     # from a display in the form of a list
@@ -169,8 +160,7 @@ class Matrice:
     def matrix_entry(position=''):
         n, m = [int(x) for x in input(f'Enter size of {position} matrix: ').split()]
         print(f'Enter {position} matrix: ')
-        a = Matrice(n, m, Matrice.matrice_former(n, m))
-        return a
+        return Matrice(n, m, Matrice.matrice_former(n, m))
 
     @staticmethod
     def menu():
