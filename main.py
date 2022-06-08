@@ -3,12 +3,12 @@ import math
 
 class Matrice:
     # Constructor for matrix class
-    def __init__(self, rows:list, column:list, contents):
+    def __init__(self, rows: list, column: list, contents):
         self.rows, self.columns = rows, column
         self.contents = contents
         self.matr_display = Matrice.seq_to_matrice(self.contents)
         # Check if the matrix is
-        # well formed i.e.
+        # well-formed i.e.
         # the rows have the same number of elements
         for x in contents:
             if len(x) != self.columns:
@@ -22,9 +22,7 @@ class Matrice:
         if matr.rows == self.rows and matr.columns == self.columns:
             sum_of_element = []
             for x in range(self.rows):
-                row = []
-                for y in range(self.columns):
-                    row.append(self.contents[x][y] + matr.contents[x][y])
+                row = [self.contents[x][y] + matr.contents[x][y] for y in range(self.columns)]
                 sum_of_element.append(row)
             Matrice.result_print(Matrice.seq_to_matrice(sum_of_element))
         else:
@@ -64,10 +62,7 @@ class Matrice:
     def sub_mat(contents, row, column, i, j):
         minor_matrice = []
         for a in range(row):
-            row = []
-            for b in range(column):
-                if a != i and b != j:
-                    row.append(contents[a][b])
+            row = [contents[a][b] for b in range(column) if a != i and b != j]
             if row:
                 minor_matrice.append(row)
         return minor_matrice
