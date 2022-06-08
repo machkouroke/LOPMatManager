@@ -153,8 +153,8 @@ class Matrice:
 
     @staticmethod
     def matrix_entry(position=''):
-        n, m = [int(x) for x in input(f'Enter size of {position} matrix: ').split()]
-        print(f'Enter {position} matrix: ')
+        n, m = [int(x) for x in input(f'Enter size of {position} matrix (n m): ').split()]
+        print(f'Enter {position} matrix (each line is a row and each element separated by space): ')
         return Matrice(n, m, Matrice.matrice_former(n, m))
 
     @staticmethod
